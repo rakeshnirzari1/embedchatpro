@@ -3,6 +3,7 @@ import OpenAI from 'openai';
 import connectDB from '@/lib/db';
 import BotSettings from '@/lib/models/BotSettings';
 import Message from '@/lib/models/Message';
+import User from '@/lib/models/User';
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,14 +42,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Use the main system OpenAI API key
-    const mainApiKey = process.env.OPENAI_API_KEY;
+    // Get the bot owner's API key
+    const botOwner = await User.findById(botSettings.userId);
     
-    if (!mainApiKey) {
+    if (!botOwner || !botOwner.openaiApiKey) {
       return NextResponse.json(
-        { error: 'System OpenAI API key not configured' },
+        { error: 'Bot owner has not configured an OpenAI API key. Please contact the bot administrator.' },
         { 
-          status: 400,
+          status: 403,
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -58,9 +59,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Initialize OpenAI with main system API key
+    // Initialize OpenAI with bot owner's API key
     const openai = new OpenAI({
-      apiKey: mainApiKey,
+      apiKey: botOwner.openaiApiKey,
     });
 
     // Build comprehensive knowledge base from all sources
