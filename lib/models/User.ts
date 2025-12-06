@@ -47,6 +47,11 @@ const UserSchema = new Schema<IUser>({
 UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   
+  // Check if password is already hashed (bcrypt hashes start with $2a$, $2b$, or $2y$)
+  if (this.password && this.password.startsWith('$2')) {
+    return next();
+  }
+  
   try {
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
