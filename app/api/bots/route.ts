@@ -103,10 +103,13 @@ export async function POST(request: NextRequest) {
 
     // Check bot limit for user
     const user = await User.findById(session.user.id);
+    console.log('User data:', user);
+    console.log('User maxBots:', user?.maxBots);
     
     if (user && user.maxBots !== undefined && user.maxBots !== -1) {
       // User has a bot limit set
       const userBotCount = await BotSettings.countDocuments({ userId: session.user.id });
+      console.log('User bot count:', userBotCount, 'Max bots:', user.maxBots);
       if (userBotCount >= user.maxBots) {
         return NextResponse.json(
           { error: `You can only create a maximum of ${user.maxBots} bot(s). Please delete an existing bot first.` },
