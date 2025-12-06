@@ -182,8 +182,25 @@ Instructions:
 
   } catch (error) {
     console.error('Chat API error:', error);
+    
+    // Check if it's an API key error
+    const errorMessage = error instanceof Error ? error.message : '';
+    if (errorMessage.includes('API') || errorMessage.includes('401') || errorMessage.includes('unauthorized')) {
+      return NextResponse.json(
+        { error: 'Please enter your OpenAI API key in settings to start chatting' },
+        { 
+          status: 403,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+          }
+        }
+      );
+    }
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Sorry, I encountered an error. Please try again later.' },
       { 
         status: 500,
         headers: {
