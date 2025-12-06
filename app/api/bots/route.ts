@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import connectDB from '@/lib/db';
 import BotSettings from '@/lib/models/BotSettings';
+import User from '@/lib/models/User';
 
 export async function GET(request: NextRequest) {
   try {
@@ -98,6 +99,20 @@ export async function POST(request: NextRequest) {
         { error: 'Bot ID already exists' },
         { status: 400 }
       );
+    }
+
+    // Check bot limit for user
+    const user = await User.findById(session.user.id);
+    
+    if (user && user.maxBots !== undefined && user.maxBots !== -1) {
+      // User has a bot limit set
+      const userBotCount = await BotSettings.countDocuments({ userId: session.user.id });
+      if (userBotCount >= user.maxBots) {
+        return NextResponse.json(
+          { error: `You can only create a maximum of ${user.maxBots} bot(s). Please delete an existing bot first.` },
+          { status: 403 }
+        );
+      }
     }
 
     // Create new bot

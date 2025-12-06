@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   openaiApiKey?: string;
+  maxBots?: number;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -31,6 +32,11 @@ const UserSchema = new Schema<IUser>({
   },
   openaiApiKey: {
     type: String,
+    required: false
+  },
+  maxBots: {
+    type: Number,
+    default: -1,
     required: false
   }
 }, {

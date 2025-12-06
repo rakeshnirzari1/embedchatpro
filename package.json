@@ -9,6 +9,8 @@
     "lint": "next lint",
     "seed": "node scripts/seed.js",
     "create-admin": "node scripts/create-admin.js",
+    "create-user": "node scripts/create-user.js",
+    "set-user-limit": "node scripts/set-user-limit.js",
     "populate-bots": "node scripts/populate-bots.js",
     "populate-bots:ts": "tsx scripts/populate-bots.ts"
   },
