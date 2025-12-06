@@ -734,7 +734,23 @@ export default function DashboardPage() {
                 <span className="hidden sm:block">Settings</span>
               </Button>
               
+              {/* Admin Users Management Button */}
+              {session?.user?.email === 'rvpnrp@gmail.com' && (
                 <Button
+                  onClick={() => router.push('/admin/users')}
+                  variant="outline"
+                  className={`flex items-center space-x-2 bg-white/80 backdrop-blur-sm border-2 hover:bg-white/90 hover:border-b-purple-300 shadow-lg relative ${
+                    pathname === '/admin/users' 
+                      ? 'border-gray-200 border-b-2 border-b-purple-500' 
+                      : 'border-gray-200'
+                  }`}
+                >
+                  <Users className="w-4 h-4" />
+                  <span className="hidden sm:block">Users</span>
+                </Button>
+              )}
+              
+              <Button
                 onClick={() => router.push('/profile')}
                 variant="outline"
                 className={`flex items-center space-x-2 bg-white/80 backdrop-blur-sm border-2 hover:bg-white/90 hover:border-b-indigo-300 shadow-lg relative ${
