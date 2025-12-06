@@ -139,14 +139,33 @@ export default function DashboardPage() {
   const [showPreview, setShowPreview] = useState(false)
   const [previewMessages, setPreviewMessages] = useState<Array<{id: string, text: string, isUser: boolean, timestamp: Date}>>([])
   const [previewInput, setPreviewInput] = useState('')
+  
+  // API Key state
+  const [hasApiKey, setHasApiKey] = useState(true)
+  const [checkingApiKey, setCheckingApiKey] = useState(true)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login')
     } else if (status === 'authenticated') {
       loadBots()
+      checkApiKey()
     }
   }, [status, router])
+
+  const checkApiKey = async () => {
+    try {
+      setCheckingApiKey(true)
+      const response = await fetch('/api/check-api-key')
+      const data = await response.json()
+      setHasApiKey(data.hasApiKey || false)
+    } catch (error) {
+      console.error('Error checking API key:', error)
+      setHasApiKey(false)
+    } finally {
+      setCheckingApiKey(false)
+    }
+  }
 
   // Debounced search effect
   useEffect(() => {
@@ -776,6 +795,27 @@ export default function DashboardPage() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* API Key Warning Banner */}
+        {!checkingApiKey && !hasApiKey && (
+          <div className="mb-8 p-6 bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-300 rounded-lg shadow-md">
+            <div className="flex items-start space-x-4">
+              <div className="text-3xl">⚠️</div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-orange-900 mb-2">OpenAI API Key Required</h3>
+                <p className="text-orange-800 mb-4">
+                  Your bot requires an OpenAI API key to function. Without it, your bot cannot process messages or train new data.
+                </p>
+                <Button 
+                  onClick={() => router.push('/settings')}
+                  className="bg-orange-600 hover:bg-orange-700 text-white font-semibold"
+                >
+                  Add API Key in Settings →
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Bots List */}
           <div className="lg:col-span-1">

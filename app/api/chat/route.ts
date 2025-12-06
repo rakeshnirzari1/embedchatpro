@@ -45,11 +45,28 @@ export async function POST(request: NextRequest) {
 
     const user = await User.findOne({ email: session.user.email });
     
-    if (!user || !user.openaiApiKey) {
+    if (!user) {
       return NextResponse.json(
-        { error: 'OpenAI API key not configured. Please set your API key in settings.' },
+        { error: 'User not found' },
         { 
-          status: 400,
+          status: 404,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+          }
+        }
+      );
+    }
+
+    // Check if user has OpenAI API key
+    if (!user.openaiApiKey) {
+      return NextResponse.json(
+        { 
+          error: '⚠️ API Key Required. Please add your OpenAI API key in Settings to use this bot. Go to Settings and add your API key to continue.' 
+        },
+        { 
+          status: 403,
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
