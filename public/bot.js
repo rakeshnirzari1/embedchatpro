@@ -231,10 +231,10 @@
         right: 0;
         width: 380px;
         height: 520px;
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(20px);
         border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         display: none;
         flex-direction: column;
         overflow: hidden;
