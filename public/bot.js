@@ -468,7 +468,7 @@
       @media (max-width: 480px) {
         .chatbot-modal {
           width: calc(100vw - 40px);
-          height: calc(100vh - 100px);
+          height: 300px;
           bottom: 10px;
         }
       }
