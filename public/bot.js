@@ -483,6 +483,8 @@
   // Simple markdown to HTML converter
   function markdownToHtml(text) {
     return text
+      // Convert [text](url) to <a href="url" target="_blank">text</a>
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color: #3B82F6; text-decoration: underline; cursor: pointer;">$1</a>')
       // Convert **bold** to <strong>bold</strong>
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       // Convert *italic* to <em>italic</em>

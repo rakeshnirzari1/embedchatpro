@@ -120,7 +120,10 @@ Instructions:
 - If you don't know the answer based on the provided information, politely say "I don't have information about that in my knowledge base. Please contact support for more assistance."
 - Keep responses concise and relevant
 - Use the bot's name: ${botSettings.name}
-- When referencing information, mention the source if possible (e.g., "According to our FAQ" or "Based on our documentation")`;
+- When referencing information, mention the source if possible (e.g., "According to our FAQ" or "Based on our documentation")
+- When including URLs or links in your response, ALWAYS format them as markdown links using the format [link text](URL)
+  Example: "Visit [our contact page](https://example.com/contact) for more information"
+- Do not use plain URLs like https://example.com - always use markdown link format [text](url)`;
 
     // Call OpenAI API
     const completion = await openai.chat.completions.create({
