@@ -469,7 +469,14 @@
         .chatbot-modal {
           width: calc(100vw - 40px);
           height: 300px;
-          bottom: 10px;
+          bottom: 80px;
+          max-height: 300px;
+        }
+      }
+
+      @media (max-width: 480px) and (max-height: 800px) {
+        #chatbot-input {
+          font-size: 16px;
         }
       }
     `;
