@@ -466,10 +466,77 @@
       }
 
       @media (max-width: 480px) {
+        #chatbot-widget {
+          bottom: 0;
+          right: 0;
+          left: 0;
+          z-index: 10000;
+        }
+
+        .chatbot-button {
+          width: 56px;
+          height: 56px;
+          bottom: 20px;
+          right: 20px;
+        }
+
         .chatbot-modal {
-          width: calc(100vw - 40px);
-          height: calc(100vh - 100px);
-          bottom: 10px;
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          left: 0;
+          top: auto;
+          width: 100vw;
+          height: 100vh;
+          max-height: 100vh;
+          border-radius: 0;
+          box-shadow: none;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .chatbot-modal.open {
+          animation: slideUpMobile 0.3s ease-out;
+        }
+
+        @keyframes slideUpMobile {
+          from {
+            transform: translateY(100%);
+          }
+          to {
+            transform: translateY(0);
+          }
+        }
+
+        .chatbot-header {
+          flex-shrink: 0;
+          padding: 16px;
+        }
+
+        #chatbot-messages {
+          flex: 1;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          padding: 16px;
+          padding-bottom: 80px;
+        }
+
+        .chatbot-input-container {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 12px 16px;
+          padding-bottom: max(12px, env(safe-area-inset-bottom));
+          background: white;
+          border-top: 1px solid #e5e7eb;
+          display: flex;
+          gap: 8px;
+          z-index: 10001;
+        }
+
+        #chatbot-input {
+          font-size: 16px;
         }
       }
     `;
@@ -528,8 +595,10 @@
     messageDiv.appendChild(contentDiv);
     messagesContainer.appendChild(messageDiv);
     
-    // Scroll to bottom
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    // Scroll to bottom with a small delay to ensure DOM is fully rendered
+    setTimeout(() => {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 0);
   }
 
   // Show typing indicator
@@ -546,7 +615,9 @@
       </div>
     `;
     messagesContainer.appendChild(typingDiv);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    setTimeout(() => {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 0);
   }
 
   // Hide typing indicator
