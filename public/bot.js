@@ -64,6 +64,25 @@
     }
   }
 
+  // Load open/closed state from localStorage
+  function loadOpenState() {
+    try {
+      const saved = localStorage.getItem('chatbot_open_' + botId);
+      return saved === 'true';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Save open/closed state to localStorage
+  function saveOpenState(state) {
+    try {
+      localStorage.setItem('chatbot_open_' + botId, state ? 'true' : 'false');
+    } catch (e) {
+      console.warn('Chatbot: Could not save open state to localStorage');
+    }
+  }
+
   // Load bot settings
   async function loadBotSettings() {
     try {
@@ -300,6 +319,17 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: transform 0.2s;
+        position: relative;
+        z-index: 1;
+      }
+
+      .chatbot-close:hover {
+        transform: scale(1.2);
+      }
+
+      .chatbot-close:active {
+        transform: scale(0.95);
       }
 
       .chatbot-messages {
@@ -513,6 +543,13 @@
           padding: 16px;
         }
 
+        .chatbot-close {
+          width: 40px;
+          height: 40px;
+          font-size: 28px;
+          padding: 8px;
+        }
+
         #chatbot-messages {
           flex: 1;
           overflow-y: auto;
@@ -715,9 +752,11 @@
     if (isOpen) {
       modal.classList.add('open');
       document.getElementById('chatbot-input').focus();
+      saveOpenState(true);
       trackEvent('chat_opened');
     } else {
       modal.classList.remove('open');
+      saveOpenState(false);
       trackEvent('chat_closed');
     }
   }
@@ -756,6 +795,15 @@
 
     // Load chat history
     loadChatHistory();
+    
+    // DO NOT auto-open on page load
+    // Only restore open state if user explicitly left it open
+    // (This prevents the chat from automatically opening and blocking website access)
+    // Comment out the line below if you want chat to auto-open:
+    // isOpen = loadOpenState();
+    // if (isOpen) {
+    //   document.getElementById('chatbot-modal').classList.add('open');
+    // }
   }
 
   // Initialize when DOM is ready
