@@ -539,8 +539,8 @@
     messageDiv.appendChild(contentDiv);
     messagesContainer.appendChild(messageDiv);
     
-    // Scroll to bottom
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    // Scroll to show top of new message
+    messageDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // Show typing indicator
