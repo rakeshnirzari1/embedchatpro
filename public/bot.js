@@ -654,7 +654,6 @@
     
     if (isOpen) {
       modal.classList.add('open');
-      document.getElementById('chatbot-input').focus();
       trackEvent('chat_opened');
     } else {
       modal.classList.remove('open');
