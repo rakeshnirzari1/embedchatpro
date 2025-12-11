@@ -276,6 +276,7 @@
         bottom: 0;
         background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
         animation: shimmer 3s infinite;
+        pointer-events: none;
       }
 
       @keyframes shimmer {
@@ -300,6 +301,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+        z-index: 10;
+        flex-shrink: 0;
       }
 
       .chatbot-messages {
